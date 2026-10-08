@@ -1,0 +1,29 @@
+services:
+    radarpartners-front:
+        user: "${UID:-1000}:${GID:-1000}"
+        build:
+            context: .
+            dockerfile: .docker/Dockerfile
+            target: ${APP_ENV:-dev}
+        container_name: radarpartners-front
+        environment:
+            HOST: 0.0.0.0
+            PORT: 3000
+        env_file:
+            - .env
+        volumes:
+            - "./:/var/www/html"
+            - "front_node_modules:/var/www/html/node_modules"
+        networks:
+            - web
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.radarpartners-front.rule=Host(`${DOMAIN:-localhost}`)"
+            - "traefik.http.services.radarpartners-front.loadbalancer.server.port=3000"
+
+volumes:
+    front_node_modules:
+
+networks:
+    web:
+        external: true
