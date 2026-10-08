@@ -1,75 +1,18 @@
-# Nuxt Minimal Starter
+# Radar Partenaires — Front
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Nuxt 4 / Vue 3 (Composition API) / TypeScript. Dashboard de l'outil de prospection ; l'API Symfony est dans le repo `api`.
 
-## Setup
+## Dev
 
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Tout tourne dans Docker, derrière Traefik (réseau externe `web`).
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+cp .env.example .env   # puis adapter
+make up                # http://radarpartners.dev.local
+make logs
+make bash
 ```
 
-## Production
+Variables (`.env`) : `DOMAIN`, `NUXT_PUBLIC_SITE_URL`, `NUXT_API_BASE_URL` (appels serveur, `http://radarpartners-api`), `NUXT_PUBLIC_API_BASE_URL` (appels navigateur).
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Entrée `radarpartners.dev.local` à ajouter au fichier hosts.
