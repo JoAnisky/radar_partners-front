@@ -25,6 +25,13 @@ async function patch(payload: Record<string, unknown>, message: string) {
   }
 }
 
+const editingInfo = ref(false)
+
+async function onInfoSaved() {
+  editingInfo.value = false
+  await refresh()
+}
+
 const editingId = ref<number | null>(null)
 
 async function onEdited() {
@@ -70,9 +77,13 @@ const contactName = (contactId: number | null) =>
     <div class="grid gap-6 lg:grid-cols-3">
       <UCard class="lg:col-span-2">
         <template #header>
-          <h2 class="font-medium">Informations</h2>
+          <div class="flex items-center justify-between">
+            <h2 class="font-medium">Informations</h2>
+            <UButton v-if="!editingInfo" label="Modifier" color="neutral" variant="ghost" size="xs" @click="editingInfo = true" />
+          </div>
         </template>
-        <dl class="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+        <CompanyForm v-if="editingInfo" :company="company" @saved="onInfoSaved" @cancel="editingInfo = false" />
+        <dl v-else class="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
           <div><dt class="text-muted">Adresse</dt><dd>{{ [company.address, company.postalCode, company.city].filter(Boolean).join(', ') || '—' }}</dd></div>
           <div><dt class="text-muted">Effectif</dt><dd>{{ company.headcountRange ?? '—' }}</dd></div>
           <div><dt class="text-muted">Téléphone</dt><dd>{{ company.phone ?? '—' }}</dd></div>

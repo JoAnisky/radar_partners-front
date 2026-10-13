@@ -99,3 +99,18 @@ export interface InteractionUpdatePayload {
   notes?: string | null
   nextActionAt?: string | null
 }
+
+export interface CompanyUpdatePayload {
+  name?: string
+  type?: CompanyType
+  scope?: Scope
+  website?: string | null
+  address?: string | null
+  postalCode?: string | null
+  city?: string | null
+  phone?: string | null
+  email?: string | null
+  siren?: string | null
+  nafCode?: string | null
+  headcountRange?: string | null
+}
