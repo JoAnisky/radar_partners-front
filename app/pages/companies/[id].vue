@@ -77,7 +77,7 @@ const contactName = (contactId: number | null) =>
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div>
         <NuxtLink
-          to="/"
+          to="/companies"
           class="text-sm text-muted hover:underline"
         >← Entreprises</NuxtLink>
         <h1 class="text-2xl font-semibold">

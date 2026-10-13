@@ -31,6 +31,8 @@ describe('mise en page', () => {
 
     expect(text).toContain('Radar')
     expect(text).toContain('Partenaires')
+    expect(text).toContain('Aperçu')
+    expect(text).toContain('Accueil')
     expect(text).toContain('Prospection')
     expect(text).toContain('Entreprises')
     expect(text).toContain('Contacts')
@@ -68,10 +70,17 @@ describe('mise en page', () => {
     await vi.waitFor(() => expect(document.body.textContent).toContain('Nouvelle entreprise'))
   })
 
-  it('affiche « Entreprises » comme titre de l\'accueil', async () => {
+  it('affiche « Accueil » comme titre de la page d\'accueil', async () => {
     const wrapper = await mountLayout('/')
 
-    await vi.waitFor(() => expect(wrapper.find('h1').text()).toBe('Entreprises'))
+    await vi.waitFor(() => expect(wrapper.find('h1').text()).toBe('Accueil'))
+  })
+
+  it('pointe Entreprises vers /companies et l\'accueil vers /', async () => {
+    const wrapper = await mountLayout('/')
+
+    expect(wrapper.find('a[href="/companies"]').text()).toContain('Entreprises')
+    expect(wrapper.find('a[href="/"]').exists()).toBe(true)
   })
 
   it('propose la recherche globale', async () => {

@@ -23,7 +23,7 @@ describe('useGlobalSearch', () => {
   it('propose les pages sans recherche', () => {
     const { groups } = useGlobalSearch()
 
-    expect(group(groups, 'pages').items.map(item => item.to)).toEqual(['/', '/contacts', '/signals'])
+    expect(group(groups, 'pages').items.map(item => item.to)).toEqual(['/', '/companies', '/contacts', '/signals'])
     expect(group(groups, 'companies').items).toEqual([])
     expect(group(groups, 'contacts').items).toEqual([])
   })

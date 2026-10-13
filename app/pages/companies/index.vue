@@ -5,11 +5,13 @@ import type { CompanySummary, Page, PipelineStatus } from '~/types/api'
 definePageMeta({ title: 'Entreprises' })
 
 const api = useApi()
+const route = useRoute()
 
 const search = ref('')
 const q = ref('')
-const status = ref<PipelineStatus | 'ALL'>('ALL')
-const due = ref(false)
+const queryStatus = String(route.query.status ?? '')
+const status = ref<PipelineStatus | 'ALL'>(queryStatus in statusLabels ? queryStatus as PipelineStatus : 'ALL')
+const due = ref(route.query.due === '1')
 const sort = ref('score')
 const direction = ref<'asc' | 'desc'>('desc')
 const page = ref(1)

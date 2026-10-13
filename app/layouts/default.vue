@@ -20,9 +20,15 @@ const title = computed(() => (route.meta.title as string | undefined) ?? 'Radar 
 
 const sections = computed<{ label: string, items: NavigationMenuItem[] }[]>(() => [
   {
+    label: 'Aperçu',
+    items: [
+      { label: 'Accueil', icon: 'i-lucide-layout-dashboard', to: '/', active: route.path === '/' },
+    ],
+  },
+  {
     label: 'Prospection',
     items: [
-      { label: 'Entreprises', icon: 'i-lucide-building-2', to: '/', active: route.path === '/' || route.path.startsWith('/companies') },
+      { label: 'Entreprises', icon: 'i-lucide-building-2', to: '/companies', active: route.path.startsWith('/companies') },
       { label: 'Contacts', icon: 'i-lucide-users', to: '/contacts' },
     ],
   },

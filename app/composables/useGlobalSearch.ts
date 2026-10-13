@@ -1,7 +1,8 @@
 import type { CompanySummary, ContactListItem, Page } from '~/types/api'
 
 const pages = [
-  { label: 'Entreprises', icon: 'i-lucide-building-2', to: '/' },
+  { label: 'Accueil', icon: 'i-lucide-layout-dashboard', to: '/' },
+  { label: 'Entreprises', icon: 'i-lucide-building-2', to: '/companies' },
   { label: 'Contacts', icon: 'i-lucide-users', to: '/contacts' },
   { label: 'Signaux', icon: 'i-lucide-radio-tower', to: '/signals' },
 ]

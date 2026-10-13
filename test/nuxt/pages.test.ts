@@ -3,7 +3,7 @@ import { mockNuxtImport, mountSuspended, registerEndpoint } from '@nuxt/test-uti
 import { createError, getQuery } from 'h3'
 import CompanyPage from '~/pages/companies/[id].vue'
 import ContactsPage from '~/pages/contacts.vue'
-import IndexPage from '~/pages/index.vue'
+import CompaniesPage from '~/pages/companies/index.vue'
 import SignalsPage from '~/pages/signals.vue'
 import type { CompanyDetail, CompanySummary, ContactListItem, Signal } from '~/types/api'
 
@@ -76,7 +76,7 @@ describe('page Entreprises', () => {
   })
 
   it('affiche les entreprises avec leur statut, leur score et un lien vers la fiche', async () => {
-    const wrapper = await mountPage(IndexPage, '/')
+    const wrapper = await mountPage(CompaniesPage, '/companies')
     await waitForText(wrapper, 'Acme Studio')
 
     expect(wrapper.text()).toContain('Contactée')
@@ -88,7 +88,7 @@ describe('page Entreprises', () => {
   })
 
   it('trie par score décroissant par défaut', async () => {
-    const wrapper = await mountPage(IndexPage, '/')
+    const wrapper = await mountPage(CompaniesPage, '/companies')
     await waitForText(wrapper, 'Acme Studio')
 
     expect(requests[0]).toMatchObject({ sort: 'score', direction: 'desc', page: '1', perPage: '25' })
@@ -97,7 +97,7 @@ describe('page Entreprises', () => {
   })
 
   it('envoie la recherche après un court délai', async () => {
-    const wrapper = await mountPage(IndexPage, '/')
+    const wrapper = await mountPage(CompaniesPage, '/companies')
     await waitForText(wrapper, 'Acme Studio')
 
     await wrapper.find('input[placeholder^="Rechercher"]').setValue('  acme ')
@@ -106,12 +106,38 @@ describe('page Entreprises', () => {
   })
 
   it('filtre les entreprises à relancer', async () => {
-    const wrapper = await mountPage(IndexPage, '/')
+    const wrapper = await mountPage(CompaniesPage, '/companies')
     await waitForText(wrapper, 'Acme Studio')
 
     await wrapper.find('button[role="switch"]').trigger('click')
 
     await vi.waitFor(() => expect(requests.at(-1)).toMatchObject({ due: '1' }))
+  })
+})
+
+describe('page Entreprises (filtres venant de l\'adresse)', () => {
+  it('applique le statut et « à relancer » reçus dans l\'adresse', async () => {
+    registerEndpoint('/api/companies', (event) => {
+      requests.push(getQuery(event))
+      return { items: [summary], total: 1, page: 1, perPage: 25 }
+    })
+
+    const wrapper = await mountPage(CompaniesPage, '/companies?status=MEETING&due=1')
+    await waitForText(wrapper, 'Acme Studio')
+
+    expect(requests[0]).toMatchObject({ status: 'MEETING', due: '1' })
+  })
+
+  it('ignore un statut inconnu dans l\'adresse', async () => {
+    registerEndpoint('/api/companies', (event) => {
+      requests.push(getQuery(event))
+      return { items: [summary], total: 1, page: 1, perPage: 25 }
+    })
+
+    const wrapper = await mountPage(CompaniesPage, '/companies?status=NOPE')
+    await waitForText(wrapper, 'Acme Studio')
+
+    expect(requests[0]).not.toHaveProperty('status')
   })
 })
 
