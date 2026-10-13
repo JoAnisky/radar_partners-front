@@ -6,3 +6,4 @@ Contexte métier, domaine, pipeline et conventions : voir `../api/CLAUDE.md` (re
 - Dev dans Docker (`make up`, `make bash`), jamais de Node local. Commandes npm : `docker exec radarpartners-front npm ...`.
 - L'API se consomme via `NUXT_API_BASE_URL` (serveur) et `NUXT_PUBLIC_API_BASE_URL` (navigateur) : ne jamais coder d'URL en dur.
 - Code et commits en anglais, commentaires courts. Ne jamais committer sans validation explicite.
+- UI : Nuxt UI v4 (Tailwind 4), SPA (`ssr: false`). Types de l'API dans `app/types/api.ts`, libellés dans `app/utils/labels.ts`. Vérifier avec `npx vue-tsc --noEmit` (TypeScript 5). Détails : `../api/docs/front.md`.
