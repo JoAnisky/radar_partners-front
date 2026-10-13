@@ -72,6 +72,7 @@ const contactName = (contactId: number | null) =>
         <NuxtLink to="/" class="text-sm text-muted hover:underline">← Entreprises</NuxtLink>
         <h1 class="text-2xl font-semibold">
           {{ company.name }}
+          <ScoreBadge :score="company.score" />
           <UBadge v-if="company.archived" color="neutral" variant="outline">Archivée</UBadge>
         </h1>
         <p class="text-sm text-muted">
@@ -171,6 +172,17 @@ const contactName = (contactId: number | null) =>
         </ul>
       </UCard>
     </div>
+
+    <UCard v-if="company.scoreExplanation">
+      <template #header>
+        <h2 class="font-medium">Score {{ company.score }}/100</h2>
+      </template>
+      <ul class="space-y-1 text-sm">
+        <li v-for="line in company.scoreExplanation.split('\n')" :key="line" :class="line.startsWith('Total') || line.startsWith('Éliminée') ? 'font-medium' : 'text-muted'">
+          {{ line }}
+        </li>
+      </ul>
+    </UCard>
 
     <UCard>
       <template #header>

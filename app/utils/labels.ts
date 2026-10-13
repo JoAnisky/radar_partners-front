@@ -70,3 +70,10 @@ export function errorMessage(error: unknown): string {
   const data = (error as { data?: { detail?: string, error?: string } } | null)?.data
   return data?.detail ?? data?.error ?? 'Une erreur est survenue.'
 }
+
+export function scoreColor(score: number): 'neutral' | 'warning' | 'info' | 'success' {
+  if (score >= 60) return 'success'
+  if (score >= 35) return 'info'
+  if (score >= 15) return 'warning'
+  return 'neutral'
+}

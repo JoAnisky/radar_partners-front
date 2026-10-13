@@ -8,8 +8,8 @@ const search = ref('')
 const q = ref('')
 const status = ref<PipelineStatus | 'ALL'>('ALL')
 const due = ref(false)
-const sort = ref('name')
-const direction = ref<'asc' | 'desc'>('asc')
+const sort = ref('score')
+const direction = ref<'asc' | 'desc'>('desc')
 const page = ref(1)
 const perPage = 25
 
@@ -38,6 +38,7 @@ const { data, status: loadStatus } = await useAsyncData(
 
 const statusItems = [{ value: 'ALL', label: 'Tous les statuts' }, ...toItems(statusLabels)]
 const sortItems = [
+  { value: 'score', label: 'Score' },
   { value: 'name', label: 'Nom' },
   { value: 'lastInteractionAt', label: 'Dernier contact' },
   { value: 'recontactAfter', label: 'Date de relance' },
@@ -45,6 +46,7 @@ const sortItems = [
 ]
 
 const columns: TableColumn<CompanySummary>[] = [
+  { accessorKey: 'score', header: 'Score' },
   { accessorKey: 'name', header: 'Entreprise' },
   { accessorKey: 'city', header: 'Ville' },
   { accessorKey: 'headcountRange', header: 'Effectif' },
@@ -69,6 +71,9 @@ const columns: TableColumn<CompanySummary>[] = [
     </div>
 
     <UTable :data="data?.items ?? []" :columns="columns" :loading="loadStatus === 'pending'">
+      <template #score-cell="{ row }">
+        <ScoreBadge :score="row.original.score" />
+      </template>
       <template #name-cell="{ row }">
         <NuxtLink :to="`/companies/${row.original.id}`" class="font-medium text-primary hover:underline">
           {{ row.original.name }}
