@@ -128,3 +128,17 @@ export interface ContactListItem extends Contact {
   company: { id: number, name: string, city: string | null, status: PipelineStatus }
   lastInteractionAt: string | null
 }
+
+export interface Stats {
+  weeks: string[]
+  kpis: {
+    companies: { total: number, createdLast7Days: number, series: number[] }
+    due: { total: number }
+    interactions: { last30Days: number, previous30Days: number, deltaPercent: number | null, series: number[] }
+    signals: { last30Days: number, previous30Days: number, deltaPercent: number | null, unresolved: number, series: number[] }
+  }
+  activity: { interactions: number[], signals: number[], companies: number[] }
+  pipeline: { status: PipelineStatus, count: number }[]
+  progress: { total: number, contacted: number, reachable: number, typed: number }
+  lists: { due: CompanySummary[], priorities: CompanySummary[], recentSignals: Signal[] }
+}

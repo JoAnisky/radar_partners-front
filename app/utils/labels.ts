@@ -62,8 +62,18 @@ export function toItems<T extends string>(labels: Record<T, string>) {
   return (Object.entries(labels) as [T, string][]).map(([value, label]) => ({ value, label }))
 }
 
+/** Jour calendaire du serveur lu dans la chaîne ISO : pas de décalage selon le fuseau du navigateur. */
+function calendarDay(iso: string): [string, string, string] {
+  const [year = '', month = '', day = ''] = iso.slice(0, 10).split('-')
+
+  return [year, month, day]
+}
+
 export function formatDate(iso: string | null | undefined): string {
-  return iso ? new Date(iso).toLocaleDateString('fr-FR') : '—'
+  if (!iso) return '—'
+  const [year, month, day] = calendarDay(iso)
+
+  return `${day}/${month}/${year}`
 }
 
 export function errorMessage(error: unknown): string {
@@ -76,4 +86,25 @@ export function scoreColor(score: number): 'neutral' | 'warning' | 'info' | 'suc
   if (score >= 35) return 'info'
   if (score >= 15) return 'warning'
   return 'neutral'
+}
+
+/** Couleurs des graphiques (palette Tailwind) : les variables CSS ne sont émises que si une classe les utilise. */
+export const statusChartColors: Record<PipelineStatus, string> = {
+  TO_CONTACT: '#71717a',
+  CONTACTED: '#0ea5e9',
+  FOLLOW_UP: '#8b5cf6',
+  MEETING: '#10b981',
+  PARTNER: '#14b8a6',
+  ON_HOLD: '#f59e0b',
+  EXCLUDED: '#ef4444',
+}
+
+export function formatDayMonth(iso: string): string {
+  const [, month, day] = calendarDay(iso)
+
+  return `${day}/${month}`
+}
+
+export function formatDelta(percent: number): string {
+  return `${percent > 0 ? '+' : ''}${Math.round(percent)} %`
 }
