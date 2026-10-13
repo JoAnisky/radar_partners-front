@@ -6,4 +6,4 @@ FROM base AS dev
 ENV NODE_ENV=development
 RUN mkdir -p node_modules .nuxt && chown -R node:node /var/www/html
 USER node
-CMD ["sh", "-c", "npm install && npx nuxt dev --host 0.0.0.0"]
+CMD ["sh", "-c", "npm install && npx nuxt dev --host 0.0.0.0 --no-fork"]
