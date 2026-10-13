@@ -2,9 +2,9 @@ export type PipelineStatus = 'TO_CONTACT' | 'CONTACTED' | 'FOLLOW_UP' | 'MEETING
 export type Scope = 'LOCAL' | 'NATIONAL'
 export type CompanyType = 'ESN' | 'WEB_AGENCY' | 'COM_AGENCY' | 'END_CLIENT' | 'UNKNOWN'
 export type Channel = 'PHONE' | 'EMAIL' | 'IN_PERSON' | 'LINKEDIN' | 'WEB_FORM'
-export type Outcome =
-  | 'NO_ANSWER' | 'VOICEMAIL' | 'NOBODY_ON_SITE' | 'NO_NEED' | 'NO_FREELANCE_POLICY'
-  | 'JUST_HIRED' | 'MEETING_SCHEDULED' | 'POSITIVE' | 'OTHER'
+export type Outcome
+  = | 'NO_ANSWER' | 'VOICEMAIL' | 'NOBODY_ON_SITE' | 'NO_NEED' | 'NO_FREELANCE_POLICY'
+    | 'JUST_HIRED' | 'MEETING_SCHEDULED' | 'POSITIVE' | 'OTHER'
 export type SignalType = 'JOB_POSTING' | 'FREELANCE_MISSION' | 'STACK_DETECTED' | 'COMPANY_CREATED' | 'RECENT_HIRE'
 
 export interface Page<T> {

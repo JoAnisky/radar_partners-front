@@ -5,7 +5,10 @@ defineProps<{ status: PipelineStatus }>()
 </script>
 
 <template>
-  <UBadge :color="statusColors[status]" variant="subtle">
+  <UBadge
+    :color="statusColors[status]"
+    variant="subtle"
+  >
     {{ statusLabels[status] }}
   </UBadge>
 </template>

@@ -16,9 +16,13 @@ const perPage = 25
 let timer: ReturnType<typeof setTimeout> | undefined
 watch(search, (value) => {
   clearTimeout(timer)
-  timer = setTimeout(() => { q.value = value.trim() }, 300)
+  timer = setTimeout(() => {
+    q.value = value.trim()
+  }, 300)
 })
-watch([q, status, due, sort, direction], () => { page.value = 1 })
+watch([q, status, due, sort, direction], () => {
+  page.value = 1
+})
 
 const query = computed(() => ({
   q: q.value || undefined,
@@ -42,7 +46,7 @@ const sortItems = [
   { value: 'name', label: 'Nom' },
   { value: 'lastInteractionAt', label: 'Dernier contact' },
   { value: 'recontactAfter', label: 'Date de relance' },
-  { value: 'createdAt', label: "Date d'ajout" },
+  { value: 'createdAt', label: 'Date d\'ajout' },
 ]
 
 const columns: TableColumn<CompanySummary>[] = [
@@ -59,23 +63,45 @@ const columns: TableColumn<CompanySummary>[] = [
 <template>
   <div class="space-y-4">
     <div class="flex flex-wrap items-center gap-3">
-      <UInput v-model="search" placeholder="Rechercher (nom, ville, SIREN)" class="w-72" />
-      <USelect v-model="status" :items="statusItems" class="w-48" />
-      <USelect v-model="sort" :items="sortItems" class="w-48" />
+      <UInput
+        v-model="search"
+        placeholder="Rechercher (nom, ville, SIREN)"
+        class="w-72"
+      />
+      <USelect
+        v-model="status"
+        :items="statusItems"
+        class="w-48"
+      />
+      <USelect
+        v-model="sort"
+        :items="sortItems"
+        class="w-48"
+      />
       <USelect
         v-model="direction"
         :items="[{ value: 'asc', label: 'Croissant' }, { value: 'desc', label: 'Décroissant' }]"
         class="w-36"
       />
-      <USwitch v-model="due" label="À relancer" />
+      <USwitch
+        v-model="due"
+        label="À relancer"
+      />
     </div>
 
-    <UTable :data="data?.items ?? []" :columns="columns" :loading="loadStatus === 'pending'">
+    <UTable
+      :data="data?.items ?? []"
+      :columns="columns"
+      :loading="loadStatus === 'pending'"
+    >
       <template #score-cell="{ row }">
         <ScoreBadge :score="row.original.score" />
       </template>
       <template #name-cell="{ row }">
-        <NuxtLink :to="`/companies/${row.original.id}`" class="font-medium text-primary hover:underline">
+        <NuxtLink
+          :to="`/companies/${row.original.id}`"
+          class="font-medium text-primary hover:underline"
+        >
           {{ row.original.name }}
         </NuxtLink>
       </template>
@@ -94,8 +120,14 @@ const columns: TableColumn<CompanySummary>[] = [
     </UTable>
 
     <div class="flex items-center justify-between">
-      <p class="text-sm text-muted">{{ data?.total ?? 0 }} entreprise(s)</p>
-      <UPagination v-model:page="page" :items-per-page="perPage" :total="data?.total ?? 0" />
+      <p class="text-sm text-muted">
+        {{ data?.total ?? 0 }} entreprise(s)
+      </p>
+      <UPagination
+        v-model:page="page"
+        :items-per-page="perPage"
+        :total="data?.total ?? 0"
+      />
     </div>
   </div>
 </template>

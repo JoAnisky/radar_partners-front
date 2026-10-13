@@ -59,24 +59,48 @@ async function submit() {
 </script>
 
 <template>
-  <form class="grid gap-4 sm:grid-cols-2" @submit.prevent="submit">
+  <form
+    class="grid gap-4 sm:grid-cols-2"
+    @submit.prevent="submit"
+  >
     <UFormField
       v-for="field in fields"
       :key="field.key"
       :label="field.label"
       :class="{ 'sm:col-span-2': field.full }"
     >
-      <UInput v-model="form[field.key]" :placeholder="field.placeholder" class="w-full" />
+      <UInput
+        v-model="form[field.key]"
+        :placeholder="field.placeholder"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Type">
-      <USelect v-model="form.type" :items="toItems(typeLabels)" class="w-full" />
+      <USelect
+        v-model="form.type"
+        :items="toItems(typeLabels)"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Zone">
-      <USelect v-model="form.scope" :items="toItems(scopeLabels)" class="w-full" />
+      <USelect
+        v-model="form.scope"
+        :items="toItems(scopeLabels)"
+        class="w-full"
+      />
     </UFormField>
     <div class="flex gap-2 sm:col-span-2">
-      <UButton type="submit" label="Enregistrer" :loading="saving" />
-      <UButton label="Annuler" color="neutral" variant="outline" @click="emit('cancel')" />
+      <UButton
+        type="submit"
+        label="Enregistrer"
+        :loading="saving"
+      />
+      <UButton
+        label="Annuler"
+        color="neutral"
+        variant="outline"
+        @click="emit('cancel')"
+      />
     </div>
   </form>
 </template>

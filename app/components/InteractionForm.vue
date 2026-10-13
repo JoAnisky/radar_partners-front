@@ -91,31 +91,75 @@ async function submit() {
 </script>
 
 <template>
-  <form class="grid gap-4 md:grid-cols-2" @submit.prevent="submit">
+  <form
+    class="grid gap-4 md:grid-cols-2"
+    @submit.prevent="submit"
+  >
     <UFormField label="Canal">
-      <USelect v-model="form.channel" :items="toItems(channelLabels)" class="w-full" />
+      <USelect
+        v-model="form.channel"
+        :items="toItems(channelLabels)"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Date">
-      <UInput v-model="form.occurredAt" type="date" class="w-full" />
+      <UInput
+        v-model="form.occurredAt"
+        type="date"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Résultat">
-      <USelect v-model="form.outcome" :items="toItems(outcomeLabels)" class="w-full" />
+      <USelect
+        v-model="form.outcome"
+        :items="toItems(outcomeLabels)"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Contact">
-      <USelect v-model="form.contactId" :items="contactItems" class="w-full" />
+      <USelect
+        v-model="form.contactId"
+        :items="contactItems"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Origine">
-      <UInput v-model="form.origin" placeholder="Événement, recommandation…" class="w-full" />
+      <UInput
+        v-model="form.origin"
+        placeholder="Événement, recommandation…"
+        class="w-full"
+      />
     </UFormField>
     <UFormField label="Prochaine action">
-      <UInput v-model="form.nextActionAt" type="date" class="w-full" />
+      <UInput
+        v-model="form.nextActionAt"
+        type="date"
+        class="w-full"
+      />
     </UFormField>
-    <UFormField label="Notes" class="md:col-span-2">
-      <UTextarea v-model="form.notes" :rows="3" class="w-full" />
+    <UFormField
+      label="Notes"
+      class="md:col-span-2"
+    >
+      <UTextarea
+        v-model="form.notes"
+        :rows="3"
+        class="w-full"
+      />
     </UFormField>
     <div class="flex gap-2 md:col-span-2">
-      <UButton type="submit" :label="editing ? 'Enregistrer les modifications' : 'Enregistrer l\'interaction'" :loading="saving" />
-      <UButton v-if="editing" label="Annuler" color="neutral" variant="outline" @click="emit('cancel')" />
+      <UButton
+        type="submit"
+        :label="editing ? 'Enregistrer les modifications' : 'Enregistrer l\'interaction'"
+        :loading="saving"
+      />
+      <UButton
+        v-if="editing"
+        label="Annuler"
+        color="neutral"
+        variant="outline"
+        @click="emit('cancel')"
+      />
     </div>
   </form>
 </template>

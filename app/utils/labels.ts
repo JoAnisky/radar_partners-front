@@ -34,7 +34,7 @@ export const outcomeLabels: Record<Outcome, string> = {
   NOBODY_ON_SITE: 'Personne sur place',
   NO_NEED: 'Pas de besoin',
   NO_FREELANCE_POLICY: 'Ne travaille pas avec des freelances',
-  JUST_HIRED: "Vient d'embaucher",
+  JUST_HIRED: 'Vient d\'embaucher',
   MEETING_SCHEDULED: 'Rendez-vous fixé',
   POSITIVE: 'Échange positif',
   OTHER: 'Autre',
@@ -51,10 +51,10 @@ export const typeLabels: Record<CompanyType, string> = {
 }
 
 export const signalTypeLabels: Record<SignalType, string> = {
-  JOB_POSTING: "Offre d'emploi",
+  JOB_POSTING: 'Offre d\'emploi',
   FREELANCE_MISSION: 'Mission freelance',
   STACK_DETECTED: 'Stack détectée',
-  COMPANY_CREATED: "Création d'entreprise",
+  COMPANY_CREATED: 'Création d\'entreprise',
   RECENT_HIRE: 'Embauche récente',
 }
 

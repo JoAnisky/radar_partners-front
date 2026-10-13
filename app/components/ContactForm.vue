@@ -59,16 +59,46 @@ async function submit() {
 </script>
 
 <template>
-  <form class="space-y-3" @submit.prevent="submit">
-    <UFormField v-for="field in fields" :key="field.key" :label="field.label" size="sm">
-      <UInput v-model="form[field.key]" :placeholder="field.placeholder" class="w-full" />
+  <form
+    class="space-y-3"
+    @submit.prevent="submit"
+  >
+    <UFormField
+      v-for="field in fields"
+      :key="field.key"
+      :label="field.label"
+      size="sm"
+    >
+      <UInput
+        v-model="form[field.key]"
+        :placeholder="field.placeholder"
+        class="w-full"
+      />
     </UFormField>
-    <UFormField label="Notes" size="sm">
-      <UTextarea v-model="form.notes" :rows="2" class="w-full" />
+    <UFormField
+      label="Notes"
+      size="sm"
+    >
+      <UTextarea
+        v-model="form.notes"
+        :rows="2"
+        class="w-full"
+      />
     </UFormField>
     <div class="flex gap-2">
-      <UButton type="submit" size="sm" :label="editing ? 'Enregistrer' : 'Ajouter'" :loading="saving" />
-      <UButton size="sm" label="Annuler" color="neutral" variant="outline" @click="emit('cancel')" />
+      <UButton
+        type="submit"
+        size="sm"
+        :label="editing ? 'Enregistrer' : 'Ajouter'"
+        :loading="saving"
+      />
+      <UButton
+        size="sm"
+        label="Annuler"
+        color="neutral"
+        variant="outline"
+        @click="emit('cancel')"
+      />
     </div>
   </form>
 </template>

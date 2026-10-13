@@ -14,9 +14,13 @@ const perPage = 25
 let timer: ReturnType<typeof setTimeout> | undefined
 watch(search, (value) => {
   clearTimeout(timer)
-  timer = setTimeout(() => { q.value = value.trim() }, 300)
+  timer = setTimeout(() => {
+    q.value = value.trim()
+  }, 300)
 })
-watch([q, sort, direction], () => { page.value = 1 })
+watch([q, sort, direction], () => {
+  page.value = 1
+})
 
 const query = computed(() => ({
   q: q.value || undefined,
@@ -36,7 +40,7 @@ const sortItems = [
   { value: 'fullName', label: 'Nom' },
   { value: 'company', label: 'Entreprise' },
   { value: 'lastInteractionAt', label: 'Dernier échange' },
-  { value: 'createdAt', label: "Date d'ajout" },
+  { value: 'createdAt', label: 'Date d\'ajout' },
 ]
 
 const columns: TableColumn<ContactListItem>[] = [
@@ -52,8 +56,16 @@ const columns: TableColumn<ContactListItem>[] = [
 <template>
   <div class="space-y-4">
     <div class="flex flex-wrap items-center gap-3">
-      <UInput v-model="search" placeholder="Rechercher (nom, rôle, email, entreprise)" class="w-80" />
-      <USelect v-model="sort" :items="sortItems" class="w-48" />
+      <UInput
+        v-model="search"
+        placeholder="Rechercher (nom, rôle, email, entreprise)"
+        class="w-80"
+      />
+      <USelect
+        v-model="sort"
+        :items="sortItems"
+        class="w-48"
+      />
       <USelect
         v-model="direction"
         :items="[{ value: 'asc', label: 'Croissant' }, { value: 'desc', label: 'Décroissant' }]"
@@ -61,9 +73,16 @@ const columns: TableColumn<ContactListItem>[] = [
       />
     </div>
 
-    <UTable :data="data?.items ?? []" :columns="columns" :loading="loadStatus === 'pending'">
+    <UTable
+      :data="data?.items ?? []"
+      :columns="columns"
+      :loading="loadStatus === 'pending'"
+    >
       <template #fullName-cell="{ row }">
-        <NuxtLink :to="`/companies/${row.original.company.id}`" class="font-medium text-primary hover:underline">
+        <NuxtLink
+          :to="`/companies/${row.original.company.id}`"
+          class="font-medium text-primary hover:underline"
+        >
           {{ row.original.fullName }}
         </NuxtLink>
       </template>
@@ -71,18 +90,36 @@ const columns: TableColumn<ContactListItem>[] = [
         {{ row.original.role ?? '—' }}
       </template>
       <template #company-cell="{ row }">
-        <NuxtLink :to="`/companies/${row.original.company.id}`" class="hover:underline">
+        <NuxtLink
+          :to="`/companies/${row.original.company.id}`"
+          class="hover:underline"
+        >
           {{ row.original.company.name }}
         </NuxtLink>
-        <span v-if="row.original.company.city" class="text-muted"> · {{ row.original.company.city }}</span>
+        <span
+          v-if="row.original.company.city"
+          class="text-muted"
+        > · {{ row.original.company.city }}</span>
       </template>
       <template #phone-cell="{ row }">
-        <a v-if="row.original.phone" :href="`tel:${row.original.phone}`" class="hover:underline">{{ row.original.phone }}</a>
-        <template v-else>—</template>
+        <a
+          v-if="row.original.phone"
+          :href="`tel:${row.original.phone}`"
+          class="hover:underline"
+        >{{ row.original.phone }}</a>
+        <template v-else>
+          —
+        </template>
       </template>
       <template #email-cell="{ row }">
-        <a v-if="row.original.email" :href="`mailto:${row.original.email}`" class="hover:underline">{{ row.original.email }}</a>
-        <template v-else>—</template>
+        <a
+          v-if="row.original.email"
+          :href="`mailto:${row.original.email}`"
+          class="hover:underline"
+        >{{ row.original.email }}</a>
+        <template v-else>
+          —
+        </template>
       </template>
       <template #lastInteractionAt-cell="{ row }">
         {{ formatDate(row.original.lastInteractionAt) }}
@@ -90,8 +127,14 @@ const columns: TableColumn<ContactListItem>[] = [
     </UTable>
 
     <div class="flex items-center justify-between">
-      <p class="text-sm text-muted">{{ data?.total ?? 0 }} contact(s). Pour en ajouter, ouvrez la fiche d'une entreprise.</p>
-      <UPagination v-model:page="page" :items-per-page="perPage" :total="data?.total ?? 0" />
+      <p class="text-sm text-muted">
+        {{ data?.total ?? 0 }} contact(s). Pour en ajouter, ouvrez la fiche d'une entreprise.
+      </p>
+      <UPagination
+        v-model:page="page"
+        :items-per-page="perPage"
+        :total="data?.total ?? 0"
+      />
     </div>
   </div>
 </template>

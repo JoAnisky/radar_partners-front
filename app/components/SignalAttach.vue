@@ -59,7 +59,11 @@ const create = () => run(async () => {
 
 <template>
   <div class="space-y-2">
-    <UInput v-model="term" placeholder="Entreprise à rattacher…" class="w-full max-w-md" />
+    <UInput
+      v-model="term"
+      placeholder="Entreprise à rattacher…"
+      class="w-full max-w-md"
+    />
     <div class="flex flex-wrap gap-2">
       <UButton
         v-for="company in results"

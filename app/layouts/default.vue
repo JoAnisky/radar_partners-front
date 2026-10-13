@@ -10,7 +10,10 @@ const items = [
   <div class="min-h-screen">
     <header class="border-b border-default">
       <UContainer class="flex h-14 items-center gap-6">
-        <NuxtLink to="/" class="font-semibold">Radar Partenaires</NuxtLink>
+        <NuxtLink
+          to="/"
+          class="font-semibold"
+        >Radar Partenaires</NuxtLink>
         <UNavigationMenu :items="items" />
       </UContainer>
     </header>
