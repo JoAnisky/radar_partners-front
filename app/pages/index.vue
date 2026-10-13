@@ -2,6 +2,8 @@
 import type { TableColumn } from '@nuxt/ui'
 import type { CompanySummary, Page, PipelineStatus } from '~/types/api'
 
+definePageMeta({ title: 'Entreprises' })
+
 const api = useApi()
 
 const search = ref('')

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Page, Signal } from '~/types/api'
 
+definePageMeta({ title: 'Signaux' })
+
 const api = useApi()
 
 const { data, refresh } = await useAsyncData(
@@ -17,9 +19,6 @@ const extra = (signal: Signal) =>
 <template>
   <div class="space-y-4">
     <div>
-      <h1 class="text-2xl font-semibold">
-        Signaux sans entreprise
-      </h1>
       <p class="text-sm text-muted">
         {{ data?.total ?? 0 }} offre(s) à rattacher. Ouvrez l'offre pour trouver l'entreprise, puis rattachez-la ici.
       </p>

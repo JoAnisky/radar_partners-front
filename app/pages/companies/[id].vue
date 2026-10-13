@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { CompanyDetail, PipelineStatus } from '~/types/api'
 
+definePageMeta({ title: 'Fiche entreprise' })
+
 const api = useApi()
 const toast = useToast()
 const route = useRoute()

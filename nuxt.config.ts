@@ -4,6 +4,8 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
+  // Thème sombre uniquement, sans bascule (clé de stockage dédiée : ignore un ancien choix « clair »).
+  colorMode: { preference: 'dark', fallback: 'dark', storageKey: 'radar-color-mode' },
   runtimeConfig: {
     public: { apiBaseUrl: '' },
   },

@@ -2,6 +2,8 @@
 import type { TableColumn } from '@nuxt/ui'
 import type { ContactListItem, Page } from '~/types/api'
 
+definePageMeta({ title: 'Contacts' })
+
 const api = useApi()
 
 const search = ref('')

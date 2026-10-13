@@ -1,2 +1,14 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+/* Thème sombre : fond quasi noir, cartes à peine plus claires, bordures discrètes. */
+.dark {
+  --ui-bg: #050505;
+  --ui-bg-muted: #0c0c0d;
+  --ui-bg-elevated: #111112;
+  --ui-bg-accented: #1a1a1c;
+  --ui-border: #1f1f22;
+  --ui-border-muted: #27272a;
+  --ui-border-accented: #34343a;
+  --ui-radius: 0.5rem;
+}
