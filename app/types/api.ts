@@ -89,3 +89,13 @@ export interface InteractionPayload {
   notes?: string
   nextActionAt?: string
 }
+
+export interface InteractionUpdatePayload {
+  channel?: Channel
+  occurredAt?: string
+  outcome?: Outcome
+  contactId?: number | null
+  origin?: string | null
+  notes?: string | null
+  nextActionAt?: string | null
+}

@@ -25,6 +25,13 @@ async function patch(payload: Record<string, unknown>, message: string) {
   }
 }
 
+const editingId = ref<number | null>(null)
+
+async function onEdited() {
+  editingId.value = null
+  await refresh()
+}
+
 const contactName = (contactId: number | null) =>
   company.value?.contacts.find(c => c.id === contactId)?.fullName
 </script>
@@ -130,14 +137,27 @@ const contactName = (contactId: number | null) =>
       <p v-if="!company.interactions.length" class="text-sm text-muted">Aucune interaction.</p>
       <ul class="space-y-4">
         <li v-for="interaction in company.interactions" :key="interaction.id" class="text-sm">
-          <p class="font-medium">
-            {{ formatDate(interaction.occurredAt) }} · {{ channelLabels[interaction.channel] }}
-            <UBadge color="neutral" variant="subtle">{{ outcomeLabels[interaction.outcome] }}</UBadge>
-          </p>
-          <p v-if="contactName(interaction.contactId)" class="text-muted">avec {{ contactName(interaction.contactId) }}</p>
-          <p v-if="interaction.origin" class="text-muted">Origine : {{ interaction.origin }}</p>
-          <p v-if="interaction.notes" class="whitespace-pre-line">{{ interaction.notes }}</p>
-          <p v-if="interaction.nextActionAt" class="text-muted">Prochaine action : {{ formatDate(interaction.nextActionAt) }}</p>
+          <InteractionForm
+            v-if="editingId === interaction.id"
+            :company-id="company.id"
+            :contacts="company.contacts"
+            :interaction="interaction"
+            @saved="onEdited"
+            @cancel="editingId = null"
+          />
+          <template v-else>
+            <div class="flex items-start justify-between gap-3">
+              <p class="font-medium">
+                {{ formatDate(interaction.occurredAt) }} · {{ channelLabels[interaction.channel] }}
+                <UBadge color="neutral" variant="subtle">{{ outcomeLabels[interaction.outcome] }}</UBadge>
+              </p>
+              <UButton label="Modifier" color="neutral" variant="ghost" size="xs" @click="editingId = interaction.id" />
+            </div>
+            <p v-if="contactName(interaction.contactId)" class="text-muted">avec {{ contactName(interaction.contactId) }}</p>
+            <p v-if="interaction.origin" class="text-muted">Origine : {{ interaction.origin }}</p>
+            <p v-if="interaction.notes" class="whitespace-pre-line">{{ interaction.notes }}</p>
+            <p v-if="interaction.nextActionAt" class="text-muted">Prochaine action : {{ formatDate(interaction.nextActionAt) }}</p>
+          </template>
         </li>
       </ul>
     </UCard>
