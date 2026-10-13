@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const items = [
   { label: 'Entreprises', to: '/' },
+  { label: 'Contacts', to: '/contacts' },
   { label: 'Signaux', to: '/signals' },
 ]
 </script>

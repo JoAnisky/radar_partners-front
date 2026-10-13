@@ -25,6 +25,28 @@ async function patch(payload: Record<string, unknown>, message: string) {
   }
 }
 
+const addingContact = ref(false)
+const editingContactId = ref<number | null>(null)
+const deletingContactId = ref<number | null>(null)
+
+async function onContactSaved() {
+  addingContact.value = false
+  editingContactId.value = null
+  await refresh()
+}
+
+async function deleteContact(contactId: number) {
+  try {
+    await api(`/api/contacts/${contactId}`, { method: 'DELETE' })
+    toast.add({ title: 'Contact supprimé', color: 'success' })
+    deletingContactId.value = null
+    await refresh()
+  }
+  catch (error) {
+    toast.add({ title: errorMessage(error), color: 'error' })
+  }
+}
+
 const editingInfo = ref(false)
 
 async function onInfoSaved() {
@@ -107,14 +129,44 @@ const contactName = (contactId: number | null) =>
 
       <UCard>
         <template #header>
-          <h2 class="font-medium">Contacts</h2>
+          <div class="flex items-center justify-between">
+            <h2 class="font-medium">Contacts</h2>
+            <UButton v-if="!addingContact" label="Ajouter" color="neutral" variant="ghost" size="xs" @click="addingContact = true" />
+          </div>
         </template>
-        <p v-if="!company.contacts.length" class="text-sm text-muted">Aucun contact.</p>
-        <ul class="space-y-3 text-sm">
+        <ContactForm v-if="addingContact" class="mb-4" :company-id="company.id" @saved="onContactSaved" @cancel="addingContact = false" />
+        <p v-if="!company.contacts.length && !addingContact" class="text-sm text-muted">Aucun contact.</p>
+        <ul class="space-y-4 text-sm">
           <li v-for="contact in company.contacts" :key="contact.id">
-            <p class="font-medium">{{ contact.fullName }}<span v-if="contact.role" class="text-muted"> · {{ contact.role }}</span></p>
-            <p v-if="contact.phone">{{ contact.phone }}</p>
-            <p v-if="contact.email">{{ contact.email }}</p>
+            <ContactForm
+              v-if="editingContactId === contact.id"
+              :company-id="company.id"
+              :contact="contact"
+              @saved="onContactSaved"
+              @cancel="editingContactId = null"
+            />
+            <template v-else>
+              <div class="flex items-start justify-between gap-2">
+                <p class="font-medium">{{ contact.fullName }}<span v-if="contact.role" class="font-normal text-muted"> · {{ contact.role }}</span></p>
+                <div class="flex shrink-0 gap-1">
+                  <UButton label="Modifier" color="neutral" variant="ghost" size="xs" @click="editingContactId = contact.id" />
+                  <UButton label="Supprimer" color="error" variant="ghost" size="xs" @click="deletingContactId = contact.id" />
+                </div>
+              </div>
+              <p v-if="contact.phone"><a :href="`tel:${contact.phone}`" class="hover:underline">{{ contact.phone }}</a></p>
+              <p v-if="contact.email"><a :href="`mailto:${contact.email}`" class="hover:underline">{{ contact.email }}</a></p>
+              <p v-if="contact.linkedinUrl">
+                <a :href="contact.linkedinUrl" target="_blank" rel="noopener" class="text-primary hover:underline">LinkedIn</a>
+              </p>
+              <p v-if="contact.notes" class="whitespace-pre-line text-muted">{{ contact.notes }}</p>
+              <div v-if="deletingContactId === contact.id" class="mt-2 rounded-md border border-error p-3">
+                <p>Supprimer définitivement ce contact ? Ses interactions sont conservées.</p>
+                <div class="mt-2 flex gap-2">
+                  <UButton label="Supprimer" color="error" size="xs" @click="deleteContact(contact.id)" />
+                  <UButton label="Annuler" color="neutral" variant="outline" size="xs" @click="deletingContactId = null" />
+                </div>
+              </div>
+            </template>
           </li>
         </ul>
       </UCard>

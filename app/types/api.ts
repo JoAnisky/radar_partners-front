@@ -114,3 +114,17 @@ export interface CompanyUpdatePayload {
   nafCode?: string | null
   headcountRange?: string | null
 }
+
+export interface ContactPayload {
+  fullName?: string
+  role?: string | null
+  phone?: string | null
+  email?: string | null
+  linkedinUrl?: string | null
+  notes?: string | null
+}
+
+export interface ContactListItem extends Contact {
+  company: { id: number, name: string, city: string | null, status: PipelineStatus }
+  lastInteractionAt: string | null
+}
