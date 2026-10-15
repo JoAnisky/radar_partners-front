@@ -28,7 +28,7 @@ watch([() => messages.value.length, busy, open], async () => {
 })
 
 async function copy(content: string) {
-  await navigator.clipboard.writeText(content)
+  await navigator.clipboard.writeText(markdownToPlain(content))
   toast.add({ title: 'Copié', color: 'success' })
 }
 
@@ -112,7 +112,14 @@ const describeCall = (call: ChatReply['toolCalls'][number]) =>
             class="max-w-[90%] space-y-1.5 rounded-lg px-3 py-2 text-sm"
             :class="message.role === 'user' ? 'bg-primary/15' : 'bg-accented'"
           >
-            <p class="whitespace-pre-wrap">
+            <ChatMarkdown
+              v-if="message.role === 'assistant'"
+              :content="message.content"
+            />
+            <p
+              v-else
+              class="whitespace-pre-wrap"
+            >
               {{ message.content }}
             </p>
             <template v-if="message.role === 'assistant'">
