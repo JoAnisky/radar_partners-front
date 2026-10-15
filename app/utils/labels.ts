@@ -1,5 +1,8 @@
 import type { Channel, CompanyType, Outcome, PipelineStatus, Scope, SignalType } from '~/types/api'
 
+/** Nom de l'assistant, affiché dans le chat. */
+export const ASSISTANT_NAME = 'Amelio'
+
 export const statusLabels: Record<PipelineStatus, string> = {
   TO_CONTACT: 'À contacter',
   CONTACTED: 'Contactée',

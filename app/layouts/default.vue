@@ -33,12 +33,6 @@ const sections = computed<{ label: string, items: NavigationMenuItem[] }[]>(() =
     ],
   },
   {
-    label: 'Assistant',
-    items: [
-      { label: 'Assistant', icon: 'i-lucide-bot', to: '/assistant' },
-    ],
-  },
-  {
     label: 'Veille',
     items: [
       { label: 'Signaux', icon: 'i-lucide-radio-tower', to: '/signals', badge: pending.value?.total || undefined },
@@ -133,5 +127,6 @@ const sections = computed<{ label: string, items: NavigationMenuItem[] }[]>(() =
     </UDashboardPanel>
 
     <CompanyCreateModal v-model:open="createOpen" />
+    <ChatBubble />
   </UDashboardGroup>
 </template>

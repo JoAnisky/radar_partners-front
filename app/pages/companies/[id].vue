@@ -13,6 +13,14 @@ const { data: company, refresh } = await useAsyncData(
   () => api<CompanyDetail>(`/api/companies/${id}`),
 )
 
+const { company: chatCompany } = useChat()
+watch(company, (value) => {
+  chatCompany.value = value ? { id: value.id, name: value.name } : null
+}, { immediate: true })
+onBeforeUnmount(() => {
+  chatCompany.value = null
+})
+
 const notes = ref('')
 watch(company, (value) => {
   notes.value = value?.notes ?? ''
