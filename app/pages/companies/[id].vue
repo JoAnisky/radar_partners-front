@@ -127,9 +127,10 @@ const contactName = (contactId: number | null) =>
             <UButton
               v-if="!editingInfo"
               label="Modifier"
+              icon="i-lucide-pencil"
               color="neutral"
-              variant="ghost"
-              size="xs"
+              variant="outline"
+              size="sm"
               @click="editingInfo = true"
             />
           </div>
@@ -216,9 +217,10 @@ const contactName = (contactId: number | null) =>
             <UButton
               v-if="!addingContact"
               label="Ajouter"
-              color="neutral"
-              variant="ghost"
-              size="xs"
+              icon="i-lucide-plus"
+              color="primary"
+              variant="soft"
+              size="sm"
               @click="addingContact = true"
             />
           </div>
@@ -259,8 +261,9 @@ const contactName = (contactId: number | null) =>
                 <div class="flex shrink-0 gap-1">
                   <UButton
                     label="Modifier"
+                    icon="i-lucide-pencil"
                     color="neutral"
-                    variant="ghost"
+                    variant="outline"
                     size="xs"
                     @click="editingContactId = contact.id"
                   />
@@ -415,8 +418,9 @@ const contactName = (contactId: number | null) =>
               </p>
               <UButton
                 label="Modifier"
+                icon="i-lucide-pencil"
                 color="neutral"
-                variant="ghost"
+                variant="outline"
                 size="xs"
                 @click="editingId = interaction.id"
               />
