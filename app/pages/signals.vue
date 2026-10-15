@@ -37,6 +37,14 @@ const extra = (signal: Signal) =>
     >
       <div class="space-y-3">
         <div>
+          <UBadge
+            v-if="signal.extracted.toReview"
+            color="warning"
+            variant="subtle"
+            class="mb-1"
+          >
+            À vérifier
+          </UBadge>
           <a
             v-if="signal.url"
             :href="signal.url"
