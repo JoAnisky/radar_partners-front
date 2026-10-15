@@ -37,6 +37,7 @@ const signal = (id: number, title: string, overrides: Partial<Signal> = {}): Sig
   url: 'https://www.free-work.com/fr/tech-it/job-mission/x/y',
   detectedAt: '2026-10-13T08:57:56+02:00',
   publishedAt: null,
+  dismissedAt: null,
   extracted: {},
   ...overrides,
 })

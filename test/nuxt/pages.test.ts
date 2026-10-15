@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport, mountSuspended, registerEndpoint } from '@nuxt/test-utils/runtime'
-import { createError, getQuery } from 'h3'
+import { createError, getQuery, readBody } from 'h3'
 import CompanyPage from '~/pages/companies/[id].vue'
 import ContactsPage from '~/pages/contacts.vue'
 import CompaniesPage from '~/pages/companies/index.vue'
@@ -40,7 +40,7 @@ const detail: CompanyDetail = {
   createdAt: '2026-09-01T00:00:00+02:00',
   contacts: [{ id: 3, fullName: 'Jane Doe', role: 'CTO', phone: '+33612345678', email: 'jane@acme.test', linkedinUrl: null, notes: null }],
   interactions: [{ id: 9, contactId: 3, occurredAt: '2026-10-01T12:00:00+02:00', channel: 'PHONE', origin: 'Apéro', outcome: 'NO_ANSWER', notes: 'Message laissé', nextActionAt: null }],
-  signals: [{ id: 4, companyId: 7, companyName: 'Acme Studio', type: 'FREELANCE_MISSION', source: 'free-work', title: 'Dev Symfony', url: 'https://www.free-work.com/x', detectedAt: '2026-10-13T08:57:56+02:00', publishedAt: null, extracted: {} }],
+  signals: [{ id: 4, companyId: 7, companyName: 'Acme Studio', type: 'FREELANCE_MISSION', source: 'free-work', title: 'Dev Symfony', url: 'https://www.free-work.com/x', detectedAt: '2026-10-13T08:57:56+02:00', publishedAt: null, dismissedAt: null, extracted: {} }],
 }
 
 const requests: Record<string, unknown>[] = []
@@ -182,6 +182,7 @@ describe('page Signaux', () => {
     url: 'https://www.free-work.com/fr/tech-it/job-mission/x/y',
     detectedAt: '2026-10-13T08:57:56+02:00',
     publishedAt: null,
+    dismissedAt: null,
     extracted: { city: 'Ramonville-Saint-Agne', dailyRate: '400 €', durationMonths: 6 },
   }
 
@@ -201,6 +202,33 @@ describe('page Signaux', () => {
     expect(link.attributes('target')).toBe('_blank')
     expect(link.attributes('rel')).toBe('noopener')
     expect(requests[0]).toMatchObject({ unresolved: '1' })
+  })
+
+  it('écarte une offre et la restaure depuis les archivées', async () => {
+    const patches: unknown[] = []
+    registerEndpoint('/api/signals/4', {
+      method: 'PATCH',
+      handler: async (event) => {
+        patches.push(await readBody(event))
+        return { ...signal, dismissedAt: '2026-10-15T09:00:00+02:00' }
+      },
+    })
+    registerEndpoint('/api/signals', (event) => {
+      const dismissed = getQuery(event).dismissed === '1'
+      return { items: dismissed ? [{ ...signal, dismissedAt: '2026-10-14T09:00:00+02:00' }] : [signal], total: 1, page: 1, perPage: 50 }
+    })
+
+    const wrapper = await mountPage(SignalsPage, '/signals')
+    await waitForText(wrapper, 'À traiter (1)')
+    expect(wrapper.text()).toContain('Archivées (1)')
+
+    await wrapper.findAll('button').find(b => b.text() === 'Écarter')!.trigger('click')
+    await vi.waitFor(() => expect(patches).toEqual([{ dismissed: true }]))
+
+    await wrapper.findAll('[role="tab"]')[1]!.trigger('click')
+    await waitForText(wrapper, 'Restaurer')
+    await wrapper.findAll('button').find(b => b.text() === 'Restaurer')!.trigger('click')
+    await vi.waitFor(() => expect(patches).toEqual([{ dismissed: true }, { dismissed: false }]))
   })
 
   it('indique quand il n\'y a rien à traiter', async () => {

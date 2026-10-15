@@ -65,6 +65,7 @@ export interface Signal {
   url: string | null
   detectedAt: string
   publishedAt: string | null
+  dismissedAt: string | null
   extracted: Record<string, unknown>
 }
 
