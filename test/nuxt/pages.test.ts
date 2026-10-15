@@ -96,6 +96,16 @@ describe('page Entreprises', () => {
     expect(requests[0]).not.toHaveProperty('due')
   })
 
+  it('masque les partenaires par défaut et les réaffiche en décochant la case', async () => {
+    const wrapper = await mountPage(CompaniesPage, '/companies')
+    await waitForText(wrapper, 'Acme Studio')
+    expect(requests[0]).toMatchObject({ hidePartners: '1' })
+
+    await wrapper.find('button[role="checkbox"]').trigger('click')
+
+    await vi.waitFor(() => expect(requests.at(-1)).not.toHaveProperty('hidePartners'))
+  })
+
   it('envoie la recherche après un court délai', async () => {
     const wrapper = await mountPage(CompaniesPage, '/companies')
     await waitForText(wrapper, 'Acme Studio')

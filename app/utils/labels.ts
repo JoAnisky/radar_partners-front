@@ -10,12 +10,12 @@ export const statusLabels: Record<PipelineStatus, string> = {
   EXCLUDED: 'Exclue',
 }
 
-export const statusColors: Record<PipelineStatus, 'neutral' | 'info' | 'primary' | 'success' | 'warning' | 'error'> = {
+export const statusColors: Record<PipelineStatus, 'neutral' | 'info' | 'primary' | 'secondary' | 'success' | 'warning' | 'error'> = {
   TO_CONTACT: 'neutral',
   CONTACTED: 'info',
   FOLLOW_UP: 'primary',
   MEETING: 'success',
-  PARTNER: 'success',
+  PARTNER: 'secondary',
   ON_HOLD: 'warning',
   EXCLUDED: 'error',
 }
@@ -94,7 +94,7 @@ export const statusChartColors: Record<PipelineStatus, string> = {
   CONTACTED: '#0ea5e9',
   FOLLOW_UP: '#8b5cf6',
   MEETING: '#10b981',
-  PARTNER: '#14b8a6',
+  PARTNER: '#d946ef',
   ON_HOLD: '#f59e0b',
   EXCLUDED: '#ef4444',
 }

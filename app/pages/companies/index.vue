@@ -12,6 +12,7 @@ const q = ref('')
 const queryStatus = String(route.query.status ?? '')
 const status = ref<PipelineStatus | 'ALL'>(queryStatus in statusLabels ? queryStatus as PipelineStatus : 'ALL')
 const due = ref(route.query.due === '1')
+const hidePartners = ref(true)
 const sort = ref('score')
 const direction = ref<'asc' | 'desc'>('desc')
 const page = ref(1)
@@ -24,7 +25,7 @@ watch(search, (value) => {
     q.value = value.trim()
   }, 300)
 })
-watch([q, status, due, sort, direction], () => {
+watch([q, status, due, hidePartners, sort, direction], () => {
   page.value = 1
 })
 
@@ -32,6 +33,7 @@ const query = computed(() => ({
   q: q.value || undefined,
   status: status.value === 'ALL' ? undefined : status.value,
   due: due.value ? 1 : undefined,
+  hidePartners: hidePartners.value ? 1 : undefined,
   sort: sort.value,
   direction: direction.value,
   page: page.value,
@@ -90,6 +92,10 @@ const columns: TableColumn<CompanySummary>[] = [
       <USwitch
         v-model="due"
         label="À relancer"
+      />
+      <UCheckbox
+        v-model="hidePartners"
+        label="Masquer les partenaires"
       />
     </div>
 

@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+/* Couleur « secondary » (statut Partenaire) : Tailwind n'émet la palette que si une classe l'utilise. */
+@source inline("bg-fuchsia-{50,100,200,300,400,500,600,700,800,900,950}");
+
 /* Thème sombre : fond quasi noir, cartes à peine plus claires, bordures discrètes. */
 .dark {
   --ui-bg: #050505;
