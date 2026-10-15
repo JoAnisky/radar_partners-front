@@ -4,6 +4,7 @@ import { createError, getQuery, readBody } from 'h3'
 import CompanyPage from '~/pages/companies/[id].vue'
 import ContactsPage from '~/pages/contacts.vue'
 import CompaniesPage from '~/pages/companies/index.vue'
+import AssistantPage from '~/pages/assistant.vue'
 import SignalsPage from '~/pages/signals.vue'
 import type { CompanyDetail, CompanySummary, ContactListItem, Signal } from '~/types/api'
 
@@ -314,5 +315,46 @@ describe('fiche entreprise', () => {
 
     await waitForText(wrapper, 'LinkedIn')
     expect(wrapper.find('input[placeholder="linkedin.com/in/…"]').exists()).toBe(true)
+  })
+})
+
+describe('page Assistant', () => {
+  const reply = { reply: 'Aucune entreprise à relancer.', toolCalls: [{ name: 'search_companies', arguments: { due: true } }] }
+
+  it('envoie la conversation et affiche la réponse avec les outils appelés', async () => {
+    const bodies: unknown[] = []
+    registerEndpoint('/api/chat', {
+      method: 'POST',
+      handler: async (event) => {
+        bodies.push(await readBody(event))
+        return reply
+      },
+    })
+
+    const wrapper = await mountPage(AssistantPage, '/assistant')
+    await wrapper.find('textarea').setValue('Qui relancer ?')
+    await wrapper.find('form').trigger('submit')
+
+    await waitForText(wrapper, 'Aucune entreprise à relancer.')
+    expect(bodies).toEqual([{ messages: [{ role: 'user', content: 'Qui relancer ?' }] }])
+    expect(wrapper.text()).toContain('Qui relancer ?')
+    expect(wrapper.text()).toContain('1 outil(s) appelé(s)')
+    expect(wrapper.text()).toContain('search_companies(due: true)')
+  })
+
+  it('affiche l\'erreur et restaure la question si le modèle ne répond pas', async () => {
+    registerEndpoint('/api/chat', {
+      method: 'POST',
+      handler: () => {
+        throw createError({ statusCode: 503, data: { error: 'Le modèle local ne répond pas' } })
+      },
+    })
+
+    const wrapper = await mountPage(AssistantPage, '/assistant')
+    await wrapper.find('textarea').setValue('Salut')
+    await wrapper.find('form').trigger('submit')
+
+    await vi.waitFor(() => expect((wrapper.find('textarea').element as HTMLTextAreaElement).value).toBe('Salut'))
+    expect(wrapper.text()).not.toContain('Le modèle réfléchit')
   })
 })

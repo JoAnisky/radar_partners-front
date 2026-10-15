@@ -69,6 +69,17 @@ export interface Signal {
   extracted: Record<string, unknown>
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+  toolCalls?: ChatReply['toolCalls']
+}
+
+export interface ChatReply {
+  reply: string
+  toolCalls: { name: string, arguments: Record<string, unknown> }[]
+}
+
 export interface CompanyDetail extends CompanySummary {
   address: string | null
   email: string | null
