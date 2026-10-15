@@ -6,6 +6,7 @@ services:
             dockerfile: .docker/Dockerfile
             target: ${APP_ENV:-dev}
         container_name: radarpartners-front
+        restart: unless-stopped
         environment:
             HOST: 0.0.0.0
             PORT: 3000
