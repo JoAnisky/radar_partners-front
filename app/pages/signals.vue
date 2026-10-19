@@ -74,7 +74,7 @@ const extra = (signal: Signal) =>
             v-if="signal.extracted.toReview"
             color="warning"
             variant="subtle"
-            class="mb-1"
+            class="mr-2 mb-1"
           >
             À vérifier
           </UBadge>
