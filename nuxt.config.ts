@@ -4,7 +4,9 @@ export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
   app: {
-    head: { link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }] },
+    head: {
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    },
   },
   css: ['~/assets/css/main.css'],
   // Thème sombre uniquement, sans bascule (clé de stockage dédiée : ignore un ancien choix « clair »).

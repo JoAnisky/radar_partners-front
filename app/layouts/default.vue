@@ -17,6 +17,7 @@ const { data: pending } = useLazyAsyncData(
 )
 
 const title = computed(() => (route.meta.title as string | undefined) ?? 'Radar Partenaires')
+useHead({ title: () => route.meta.title as string | undefined })
 
 const sections = computed<{ label: string, items: NavigationMenuItem[] }[]>(() => [
   {
