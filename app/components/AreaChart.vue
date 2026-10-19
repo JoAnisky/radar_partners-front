@@ -2,12 +2,25 @@
 const props = defineProps<{ labels: string[], values: number[], color: string, unit?: string }>()
 
 const WIDTH = 640
-const HEIGHT = 280
+const HEIGHT = 190
 const margin = { top: 12, right: 12, bottom: 28, left: 40 }
 const innerWidth = WIDTH - margin.left - margin.right
 const innerHeight = HEIGHT - margin.top - margin.bottom
 
 const id = useId()
+const svg = useTemplateRef<SVGSVGElement>('svg')
+const width = ref(0)
+let observer: ResizeObserver | undefined
+onMounted(() => {
+  if (!svg.value || typeof ResizeObserver === 'undefined') return
+  observer = new ResizeObserver(([entry]) => {
+    width.value = entry?.contentRect.width ?? 0
+  })
+  observer.observe(svg.value)
+})
+onBeforeUnmount(() => observer?.disconnect())
+// Police de 10 px à l'écran, quelle que soit l'échelle du SVG.
+const fontSize = computed(() => (width.value ? 10 * WIDTH / width.value : 10))
 const max = computed(() => axisMax(Math.max(...props.values, 0)))
 const points = computed(() => scalePoints(props.values, innerWidth, innerHeight, max.value))
 const line = computed(() => linePath(points.value))
@@ -20,6 +33,7 @@ const xLabels = computed(() => props.labels
 
 <template>
   <svg
+    ref="svg"
     :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
     class="h-auto w-full"
     role="img"
@@ -62,7 +76,8 @@ const xLabels = computed(() => props.labels
           x="-10"
           :y="grid.y + 4"
           text-anchor="end"
-          class="fill-neutral-500 text-[11px]"
+          class="fill-neutral-500"
+          :font-size="fontSize"
         >{{ grid.value }}</text>
       </g>
       <path
@@ -92,7 +107,8 @@ const xLabels = computed(() => props.labels
         :x="item.x"
         :y="innerHeight + 20"
         text-anchor="middle"
-        class="fill-neutral-500 text-[11px]"
+        class="fill-neutral-500"
+        :font-size="fontSize"
       >
         {{ item.label }}
       </text>
