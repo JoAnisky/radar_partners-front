@@ -1,0 +1,35 @@
+# Front de démo locale, branché sur l'API de démo. Lancer : make demo-up
+services:
+    radarpartners-front-demo:
+        user: "${UID:-1000}:${GID:-1000}"
+        build:
+            context: .
+            dockerfile: .docker/Dockerfile
+            target: dev
+        container_name: radarpartners-front-demo
+        restart: unless-stopped
+        environment:
+            HOST: 0.0.0.0
+            PORT: 3000
+            DOMAIN: radardemo.dev.local
+            NUXT_PUBLIC_SITE_URL: http://radardemo.dev.local
+            NUXT_API_BASE_URL: http://radarpartners-api-demo
+            NUXT_PUBLIC_API_BASE_URL: http://radardemo.api.dev.local
+        volumes:
+            - "./:/var/www/html"
+            - "front_demo_node_modules:/var/www/html/node_modules"
+            - "front_demo_nuxt:/var/www/html/.nuxt"
+        networks:
+            - web
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.radarpartners-front-demo.rule=Host(`radardemo.dev.local`)"
+            - "traefik.http.services.radarpartners-front-demo.loadbalancer.server.port=3000"
+
+volumes:
+    front_demo_node_modules:
+    front_demo_nuxt:
+
+networks:
+    web:
+        external: true
