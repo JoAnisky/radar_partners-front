@@ -3,3 +3,9 @@
 node_modules
 .nuxt
 .output
+.env
+.env.*
+test
+docker-compose*.yml
+k8s
+Jenkinsfile
