@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
     - configmap.yaml
     - deployment-front.yaml
+    - middleware.yaml
     - service-front.yaml
     - ingress-front.yaml
