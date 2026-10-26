@@ -1,2 +1,6 @@
+# Démo : pas d'indexation, mais le robot de LinkedIn peut lire l'aperçu du lien
+User-agent: LinkedInBot
+Allow: /
+
 User-agent: *
 Disallow: /

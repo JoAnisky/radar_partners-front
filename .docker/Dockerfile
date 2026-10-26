@@ -15,6 +15,9 @@ COPY . .
 RUN npx nuxt prepare
 
 FROM base AS build
+# URL publique de la démo : intégrée aux balises Open Graph au build
+ARG NUXT_PUBLIC_SITE_URL=https://radar.jonathanlore.fr
+ENV NUXT_PUBLIC_SITE_URL=$NUXT_PUBLIC_SITE_URL
 COPY package*.json ./
 RUN npm ci --ignore-scripts
 COPY . .
