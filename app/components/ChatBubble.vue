@@ -3,6 +3,7 @@ import type { ChatReply } from '~/types/api'
 
 const { messages, open, busy, draft, company, avatarState, send, reset } = useChat()
 const toast = useToast()
+const isDemo = useDemo()
 
 defineShortcuts({
   meta_j: { usingInput: true, handler: () => { open.value = !open.value } },
@@ -15,11 +16,19 @@ const suggestions = computed(() => company.value
       `Rédige un script d'appel pour ${company.value.name} (id ${company.value.id}).`,
       `Rédige un message LinkedIn pour ${company.value.name} (id ${company.value.id}).`,
     ]
-  : [
-      'Quelles entreprises dois-je relancer ?',
-      'Quelles sont les dernières offres à traiter ?',
-      'Rédige un script d\'appel pour une ESN à contacter.',
-    ])
+  : isDemo
+    ? [
+        'Quelles entreprises contacter en priorité ?',
+        'Quelles relances sont en retard ?',
+        'Quelles sont les dernières offres à traiter ?',
+        'Résume la fiche de Silex Digital.',
+        'Rédige un message d\'approche pour Silex Digital.',
+      ]
+    : [
+        'Quelles entreprises dois-je relancer ?',
+        'Quelles sont les dernières offres à traiter ?',
+        'Rédige un script d\'appel pour une ESN à contacter.',
+      ])
 
 const scroller = ref<HTMLElement>()
 watch([() => messages.value.length, busy, open], async () => {
@@ -82,7 +91,20 @@ const describeCall = (call: ChatReply['toolCalls'][number]) =>
           class="space-y-3"
         >
           <p class="text-sm text-muted">
-            Je suis {{ ASSISTANT_NAME }}. Interroge ta base ou demande-moi un script d'appel, un mail, un message LinkedIn. Je tourne en local : rien ne quitte ta machine.
+            <template v-if="isDemo">
+              <UBadge
+                label="Version de démonstration"
+                icon="i-lucide-flask-conical"
+                color="primary"
+                variant="subtle"
+                class="mb-2"
+              />
+              <br>
+              Je suis {{ ASSISTANT_NAME }} : je réponds à quelques questions types sur des données fictives. Essaie l'une de celles-ci.
+            </template>
+            <template v-else>
+              Je suis {{ ASSISTANT_NAME }}. Interroge ta base ou demande-moi un script d'appel, un mail, un message LinkedIn. Je tourne en local : rien ne quitte ta machine.
+            </template>
           </p>
           <div class="flex flex-col items-start gap-2">
             <UButton

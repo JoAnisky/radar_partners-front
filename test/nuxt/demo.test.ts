@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport, mountSuspended, registerEndpoint } from '@nuxt/test-utils/runtime'
-import { clearNuxtData } from '#imports'
+import { clearNuxtData, clearNuxtState } from '#imports'
 import DefaultLayout from '~/layouts/default.vue'
 import CompanyPage from '~/pages/companies/[id].vue'
 import SignalsPage from '~/pages/signals.vue'
+import ChatBubble from '~/components/ChatBubble.vue'
 import type { CompanyDetail, Signal } from '~/types/api'
 
 mockNuxtImport('useApi', () => () => $fetch)
@@ -101,5 +102,18 @@ describe('mode démo', () => {
 
     expect(isDisabled(wrapper, 'Écarter')).toBe(true)
     expect(wrapper.find('fieldset').attributes('disabled')).toBeDefined()
+  })
+
+  it('propose les questions types de la démo dans l\'assistant', async () => {
+    clearNuxtState(['chat-messages', 'chat-open', 'chat-busy', 'chat-draft', 'chat-company', 'chat-restored'])
+    localStorage.clear()
+    const wrapper = await mountSuspended(ChatBubble)
+    mounted.push(wrapper)
+    await wrapper.find('button[aria-label^="Ouvrir Amelio"]').trigger('click')
+
+    expect(wrapper.text()).toContain('Version de démonstration')
+    expect(wrapper.text()).toContain('Quelles entreprises contacter en priorité ?')
+    expect(wrapper.text()).toContain('Rédige un message d\'approche pour Silex Digital.')
+    expect(wrapper.text()).not.toContain('rien ne quitte ta machine')
   })
 })
