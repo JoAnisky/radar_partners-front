@@ -5,7 +5,6 @@ node_modules
 .output
 .env
 .env.*
-test
 docker-compose*.yml
 k8s
 Jenkinsfile

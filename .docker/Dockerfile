@@ -8,6 +8,12 @@ RUN mkdir -p node_modules .nuxt && chown -R node:node /var/www/html
 USER node
 CMD ["sh", "-c", "npm install && npx nuxt dev --host 0.0.0.0 --no-fork"]
 
+FROM base AS test
+COPY package*.json ./
+RUN npm ci --ignore-scripts
+COPY . .
+RUN npx nuxt prepare
+
 FROM base AS build
 COPY package*.json ./
 RUN npm ci --ignore-scripts
