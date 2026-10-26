@@ -15,6 +15,7 @@ services:
             NUXT_PUBLIC_SITE_URL: http://radardemo.dev.local
             NUXT_API_BASE_URL: http://radarpartners-api-demo
             NUXT_PUBLIC_API_BASE_URL: http://radardemo.api.dev.local
+            NUXT_PUBLIC_DEMO_MODE: "true"
         volumes:
             - "./:/var/www/html"
             - "front_demo_node_modules:/var/www/html/node_modules"

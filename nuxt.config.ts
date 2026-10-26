@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   // Thème sombre uniquement, sans bascule (clé de stockage dédiée : ignore un ancien choix « clair »).
   colorMode: { preference: 'dark', fallback: 'dark', storageKey: 'radar-color-mode' },
   runtimeConfig: {
-    public: { apiBaseUrl: '' },
+    public: { apiBaseUrl: '', demoMode: false },
   },
   compatibilityDate: '2025-07-15',
   vite: {

@@ -4,6 +4,7 @@ import type { CompanyDetail, PipelineStatus } from '~/types/api'
 definePageMeta({ title: 'Fiche entreprise' })
 
 const api = useApi()
+const isDemo = useDemo()
 const toast = useToast()
 const route = useRoute()
 const id = Number(route.params.id)
@@ -115,10 +116,12 @@ const contactName = (contactId: number | null) =>
         <USelect
           :model-value="company.status"
           :items="toItems(statusLabels)"
+          :disabled="isDemo"
           class="w-48"
           @update:model-value="(value: PipelineStatus) => patch({ status: value }, 'Statut mis à jour')"
         />
         <UButton
+          :disabled="isDemo"
           :label="company.archived ? 'Restaurer' : 'Archiver'"
           color="neutral"
           variant="outline"
@@ -136,6 +139,7 @@ const contactName = (contactId: number | null) =>
             </h2>
             <UButton
               v-if="!editingInfo"
+              :disabled="isDemo"
               label="Modifier"
               icon="i-lucide-pencil"
               color="neutral"
@@ -226,6 +230,7 @@ const contactName = (contactId: number | null) =>
             </h2>
             <UButton
               v-if="!addingContact"
+              :disabled="isDemo"
               label="Ajouter"
               icon="i-lucide-plus"
               color="primary"
@@ -270,6 +275,7 @@ const contactName = (contactId: number | null) =>
                 </p>
                 <div class="flex shrink-0 gap-1">
                   <UButton
+                    :disabled="isDemo"
                     label="Modifier"
                     icon="i-lucide-pencil"
                     color="neutral"
@@ -278,6 +284,7 @@ const contactName = (contactId: number | null) =>
                     @click="editingContactId = contact.id"
                   />
                   <UButton
+                    :disabled="isDemo"
                     label="Supprimer"
                     color="error"
                     variant="ghost"
@@ -365,12 +372,13 @@ const contactName = (contactId: number | null) =>
       <UTextarea
         v-model="notes"
         :rows="3"
+        :disabled="isDemo"
         class="w-full"
       />
       <div class="mt-3">
         <UButton
           label="Enregistrer les notes"
-          :disabled="notes === (company.notes ?? '')"
+          :disabled="isDemo || notes === (company.notes ?? '')"
           @click="patch({ notes: notes.trim() || null }, 'Notes enregistrées')"
         />
       </div>
@@ -382,11 +390,16 @@ const contactName = (contactId: number | null) =>
           Nouvelle interaction
         </h2>
       </template>
-      <InteractionForm
-        :company-id="company.id"
-        :contacts="company.contacts"
-        @saved="refresh"
-      />
+      <fieldset
+        :disabled="isDemo"
+        class="min-w-0"
+      >
+        <InteractionForm
+          :company-id="company.id"
+          :contacts="company.contacts"
+          @saved="refresh"
+        />
+      </fieldset>
     </UCard>
 
     <UCard>
@@ -427,6 +440,7 @@ const contactName = (contactId: number | null) =>
                 </UBadge>
               </p>
               <UButton
+                :disabled="isDemo"
                 label="Modifier"
                 icon="i-lucide-pencil"
                 color="neutral"

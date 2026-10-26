@@ -3,6 +3,7 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 import type { Page, Signal } from '~/types/api'
 
 const route = useRoute()
+const isDemo = useDemo()
 const api = useApi()
 
 const collapsed = ref(false)
@@ -108,12 +109,19 @@ const sections = computed<{ label: string, items: NavigationMenuItem[] }[]>(() =
 
     <UDashboardPanel>
       <template #header>
+        <p
+          v-if="isDemo"
+          class="bg-primary/10 px-4 py-1.5 text-center text-xs text-primary"
+        >
+          Démo en lecture seule · données fictives
+        </p>
         <UDashboardNavbar :title="title">
           <template #leading>
             <UDashboardSidebarCollapse />
           </template>
           <template #right>
             <UButton
+              :disabled="isDemo"
               label="Entreprise"
               icon="i-lucide-plus"
               @click="createOpen = true"

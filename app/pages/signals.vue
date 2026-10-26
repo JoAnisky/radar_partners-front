@@ -4,6 +4,7 @@ import type { Page, Signal } from '~/types/api'
 definePageMeta({ title: 'Signaux' })
 
 const api = useApi()
+const isDemo = useDemo()
 
 const view = ref('todo')
 
@@ -100,15 +101,17 @@ const extra = (signal: Signal) =>
             </template>
           </p>
         </div>
-        <div
+        <fieldset
           v-if="view === 'todo'"
-          class="flex flex-wrap items-start justify-between gap-2"
+          :disabled="isDemo"
+          class="flex min-w-0 flex-wrap items-start justify-between gap-2"
         >
           <SignalAttach
             :signal="signal"
             @attached="refreshAll"
           />
           <UButton
+            :disabled="isDemo"
             label="Écarter"
             icon="i-lucide-archive"
             color="neutral"
@@ -116,9 +119,10 @@ const extra = (signal: Signal) =>
             size="sm"
             @click="setDismissed(signal, true)"
           />
-        </div>
+        </fieldset>
         <UButton
           v-else
+          :disabled="isDemo"
           label="Restaurer"
           icon="i-lucide-undo-2"
           color="neutral"
