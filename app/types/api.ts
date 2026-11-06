@@ -1,6 +1,6 @@
 export type PipelineStatus = 'TO_CONTACT' | 'CONTACTED' | 'FOLLOW_UP' | 'MEETING' | 'PARTNER' | 'ON_HOLD' | 'EXCLUDED'
 export type Scope = 'LOCAL' | 'NATIONAL'
-export type CompanyType = 'ESN' | 'WEB_AGENCY' | 'COM_AGENCY' | 'END_CLIENT' | 'UNKNOWN'
+export type CompanyType = 'ESN' | 'WEB_AGENCY' | 'COM_AGENCY' | 'END_CLIENT' | 'INDIVIDUAL' | 'UNKNOWN'
 export type Channel = 'PHONE' | 'EMAIL' | 'IN_PERSON' | 'LINKEDIN' | 'WEB_FORM'
 export type Outcome
   = | 'NO_ANSWER' | 'VOICEMAIL' | 'NOBODY_ON_SITE' | 'NO_NEED' | 'NO_FREELANCE_POLICY'

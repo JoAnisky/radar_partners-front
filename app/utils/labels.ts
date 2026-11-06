@@ -50,6 +50,7 @@ export const typeLabels: Record<CompanyType, string> = {
   WEB_AGENCY: 'Agence web',
   COM_AGENCY: 'Agence de com',
   END_CLIENT: 'Client final',
+  INDIVIDUAL: 'Particulier',
   UNKNOWN: 'Inconnu',
 }
 
