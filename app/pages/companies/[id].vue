@@ -43,11 +43,17 @@ async function patch(payload: Record<string, unknown>, message: string) {
 const addingContact = ref(false)
 const editingContactId = ref<number | null>(null)
 const deletingContactId = ref<number | null>(null)
+const movingContactId = ref<number | null>(null)
 
 async function onContactSaved() {
   addingContact.value = false
   editingContactId.value = null
   await refresh()
+}
+
+async function onContactMoved(companyId: number) {
+  movingContactId.value = null
+  await navigateTo(`/companies/${companyId}`)
 }
 
 async function deleteContact(contactId: number) {
@@ -285,6 +291,15 @@ const contactName = (contactId: number | null) =>
                   />
                   <UButton
                     :disabled="isDemo"
+                    label="Rattacher"
+                    icon="i-lucide-link"
+                    color="neutral"
+                    variant="outline"
+                    size="xs"
+                    @click="movingContactId = contact.id"
+                  />
+                  <UButton
+                    :disabled="isDemo"
                     label="Supprimer"
                     color="error"
                     variant="ghost"
@@ -319,6 +334,13 @@ const contactName = (contactId: number | null) =>
               >
                 {{ contact.notes }}
               </p>
+              <ContactMove
+                v-if="movingContactId === contact.id"
+                :contact-id="contact.id"
+                :current-company-id="company.id"
+                @moved="onContactMoved"
+                @cancel="movingContactId = null"
+              />
               <div
                 v-if="deletingContactId === contact.id"
                 class="mt-2 rounded-md border border-error p-3"
