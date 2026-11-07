@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h } from 'vue'
 import { mockNuxtImport, mountSuspended, registerEndpoint } from '@nuxt/test-utils/runtime'
 import { createError, getQuery, readBody } from 'h3'
 import CompanyPage from '~/pages/companies/[id].vue'
@@ -239,6 +240,33 @@ describe('page Signaux', () => {
     await waitForText(wrapper, 'Restaurer')
     await wrapper.findAll('button').find(b => b.text() === 'Restaurer')!.trigger('click')
     await vi.waitFor(() => expect(patches).toEqual([{ dismissed: true }, { dismissed: false }]))
+  })
+
+  it('met à jour le compteur du menu quand une offre est écartée', async () => {
+    let pending = 1
+    registerEndpoint('/api/signals/4', { method: 'PATCH', handler: () => ({ ...signal }) })
+    registerEndpoint('/api/signals', (event) => {
+      const query = getQuery(event)
+      if (query.perPage === '1') return { items: [], total: pending, page: 1, perPage: 1 }
+      return { items: [signal], total: 1, page: 1, perPage: 50 }
+    })
+    // Simule le menu (layouts/default.vue), qui détient cette donnée.
+    const menu = await mountSuspended(defineComponent({
+      async setup() {
+        const { data } = await useAsyncData('signals-pending', () => $fetch<{ total: number }>('/api/signals', { query: { perPage: 1 } }))
+
+        return () => h('p', `menu ${data.value?.total}`)
+      },
+    }))
+    mounted.push(menu)
+    expect(menu.text()).toBe('menu 1')
+
+    const wrapper = await mountPage(SignalsPage, '/signals')
+    await waitForText(wrapper, 'À traiter (1)')
+    pending = 0
+    await wrapper.findAll('button').find(b => b.text() === 'Écarter')!.trigger('click')
+
+    await vi.waitFor(() => expect(menu.text()).toBe('menu 0'))
   })
 
   it('indique quand il n\'y a rien à traiter', async () => {

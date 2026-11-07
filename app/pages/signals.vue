@@ -23,7 +23,7 @@ const tabs = computed(() => [
   { value: 'archived', label: `Archivées (${archived.value?.total ?? 0})` },
 ])
 
-const refreshAll = () => Promise.all([refresh(), refreshArchived()])
+const refreshAll = () => Promise.all([refresh(), refreshArchived(), refreshNuxtData('signals-pending')])
 
 const toast = useToast()
 
