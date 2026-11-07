@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
-import type { CompanySummary, Page, PipelineStatus } from '~/types/api'
+import type { CompanySummary, CompanyType, Page, PipelineStatus } from '~/types/api'
 
 definePageMeta({ title: 'Entreprises' })
 
@@ -11,6 +11,7 @@ const search = ref('')
 const q = ref('')
 const queryStatus = String(route.query.status ?? '')
 const status = ref<PipelineStatus | 'ALL'>(queryStatus in statusLabels ? queryStatus as PipelineStatus : 'ALL')
+const type = ref<CompanyType | 'ALL'>('ALL')
 const due = ref(route.query.due === '1')
 const hidePartners = ref(true)
 const sort = ref('score')
@@ -25,13 +26,14 @@ watch(search, (value) => {
     q.value = value.trim()
   }, 300)
 })
-watch([q, status, due, hidePartners, sort, direction], () => {
+watch([q, status, type, due, hidePartners, sort, direction], () => {
   page.value = 1
 })
 
 const query = computed(() => ({
   q: q.value || undefined,
   status: status.value === 'ALL' ? undefined : status.value,
+  type: type.value === 'ALL' ? undefined : type.value,
   due: due.value ? 1 : undefined,
   hidePartners: hidePartners.value ? 1 : undefined,
   sort: sort.value,
@@ -47,6 +49,7 @@ const { data, status: loadStatus } = await useAsyncData(
 )
 
 const statusItems = [{ value: 'ALL', label: 'Tous les statuts' }, ...toItems(statusLabels)]
+const typeItems = [{ value: 'ALL', label: 'Tous les types' }, ...toItems(typeLabels)]
 const sortItems = [
   { value: 'score', label: 'Score' },
   { value: 'name', label: 'Nom' },
@@ -77,6 +80,11 @@ const columns: TableColumn<CompanySummary>[] = [
       <USelect
         v-model="status"
         :items="statusItems"
+        class="w-48"
+      />
+      <USelect
+        v-model="type"
+        :items="typeItems"
         class="w-48"
       />
       <USelect
