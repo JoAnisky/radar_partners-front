@@ -10,6 +10,8 @@ const toast = useToast()
 const term = ref('')
 const results = ref<CompanySummary[]>([])
 const busy = ref(false)
+const applied = ref(false)
+const appliedOn = ref(new Date().toISOString().slice(0, 10))
 
 let timer: ReturnType<typeof setTimeout> | undefined
 watch(term, (value) => {
@@ -25,8 +27,23 @@ watch(term, (value) => {
   }, 300)
 })
 
+const FOLLOW_UP_MONTHS = 1
+
 async function attach(companyId: number) {
   await api(`/api/signals/${props.signal.id}`, { method: 'PATCH', body: { companyId } })
+  if (applied.value) {
+    const followUp = new Date(`${appliedOn.value}T00:00:00Z`)
+    followUp.setUTCMonth(followUp.getUTCMonth() + FOLLOW_UP_MONTHS)
+    await api(`/api/companies/${companyId}/interactions`, {
+      method: 'POST',
+      body: {
+        channel: 'WEB_FORM',
+        occurredAt: appliedOn.value,
+        notes: `Candidature : ${props.signal.title}`,
+        nextActionAt: followUp.toISOString().slice(0, 10),
+      },
+    })
+  }
   toast.add({ title: 'Signal rattaché', color: 'success' })
   emit('attached')
 }
@@ -64,6 +81,18 @@ const create = () => run(async () => {
       placeholder="Entreprise à rattacher…"
       class="w-full max-w-md"
     />
+    <div class="flex flex-wrap items-center gap-3">
+      <UCheckbox
+        v-model="applied"
+        label="J'ai postulé"
+      />
+      <UInput
+        v-if="applied"
+        v-model="appliedOn"
+        type="date"
+        size="sm"
+      />
+    </div>
     <div class="flex flex-wrap gap-2">
       <UButton
         v-for="company in results"

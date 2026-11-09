@@ -96,4 +96,31 @@ describe('SignalAttach', () => {
     expect(api).not.toHaveBeenCalledWith('/api/signals/4', expect.anything())
     expect(wrapper.emitted('attached')).toBeUndefined()
   })
+
+  it('enregistre la candidature avec sa date et une relance à un mois', async () => {
+    const wrapper = await mountSuspended(SignalAttach, { props: { signal } })
+
+    await wrapper.find('input').setValue('ac')
+    await vi.waitFor(() => expect(buttons(wrapper)).toContain('Acme (Besançon)'))
+    await wrapper.find('[role="checkbox"]').trigger('click')
+    await wrapper.find('input[type="date"]').setValue('2026-11-09')
+    await wrapper.findAll('button').find(b => b.text() === 'Acme (Besançon)')!.trigger('click')
+
+    await vi.waitFor(() => expect(api).toHaveBeenCalledWith('/api/companies/7/interactions', {
+      method: 'POST',
+      body: { channel: 'WEB_FORM', occurredAt: '2026-11-09', notes: 'Candidature : Développeur Symfony', nextActionAt: '2026-12-09' },
+    }))
+    await vi.waitFor(() => expect(wrapper.emitted('attached')).toHaveLength(1))
+  })
+
+  it('n\'enregistre aucune candidature sans la case cochée', async () => {
+    const wrapper = await mountSuspended(SignalAttach, { props: { signal } })
+
+    await wrapper.find('input').setValue('ac')
+    await vi.waitFor(() => expect(buttons(wrapper)).toContain('Acme (Besançon)'))
+    await wrapper.findAll('button').find(b => b.text() === 'Acme (Besançon)')!.trigger('click')
+
+    await vi.waitFor(() => expect(wrapper.emitted('attached')).toHaveLength(1))
+    expect(api).not.toHaveBeenCalledWith('/api/companies/7/interactions', expect.anything())
+  })
 })
