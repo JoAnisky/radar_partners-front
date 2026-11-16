@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CompanyDetail, CompanyType, CompanyUpdatePayload, Scope } from '~/types/api'
+import type { CompanyDetail, CompanyType, CompanyUpdatePayload, Scope, Zone } from '~/types/api'
 
 const props = defineProps<{ company: CompanyDetail }>()
 const emit = defineEmits<{ saved: [], cancel: [] }>()
@@ -25,8 +25,10 @@ const fields: { key: TextField, label: string, placeholder?: string, full?: bool
 const form = reactive({
   type: props.company.type as CompanyType,
   scope: props.company.scope as Scope,
+  zone: (props.company.zone ?? 'NONE') as Zone | 'NONE',
   ...Object.fromEntries(fields.map(f => [f.key, props.company[f.key] ?? ''])) as Record<TextField, string>,
 })
+const zoneItems = [{ value: 'NONE', label: 'Non définie' }, ...toItems(zoneLabels)]
 const saving = ref(false)
 
 async function submit() {
@@ -37,6 +39,7 @@ async function submit() {
   }
   if (form.type !== props.company.type) payload.type = form.type
   if (form.scope !== props.company.scope) payload.scope = form.scope
+  if (form.zone !== (props.company.zone ?? 'NONE')) payload.zone = form.zone === 'NONE' ? null : form.zone
 
   if (!Object.keys(payload).length) {
     emit('cancel')
@@ -82,10 +85,17 @@ async function submit() {
         class="w-full"
       />
     </UFormField>
-    <UFormField label="Zone">
+    <UFormField label="Périmètre">
       <USelect
         v-model="form.scope"
         :items="toItems(scopeLabels)"
+        class="w-full"
+      />
+    </UFormField>
+    <UFormField label="Zone">
+      <USelect
+        v-model="form.zone"
+        :items="zoneItems"
         class="w-full"
       />
     </UFormField>

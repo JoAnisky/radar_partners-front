@@ -18,6 +18,7 @@ const company = (id: number, name: string, overrides: Partial<CompanySummary> = 
   headcountRange: '10-19',
   type: 'UNKNOWN',
   scope: 'LOCAL',
+  zone: null,
   status: 'TO_CONTACT',
   score: 40,
   flags: [],

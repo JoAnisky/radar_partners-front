@@ -23,6 +23,7 @@ const summary: CompanySummary = {
   headcountRange: '10-19',
   type: 'WEB_AGENCY',
   scope: 'LOCAL',
+  zone: 'FRANCHE_COMTE',
   status: 'CONTACTED',
   score: 55,
   flags: [],
@@ -84,6 +85,7 @@ describe('page Entreprises', () => {
     expect(wrapper.text()).toContain('55')
     expect(wrapper.text()).toContain('Besançon')
     expect(wrapper.text()).toContain('10-19')
+    expect(wrapper.text()).toContain('Franche-Comté')
     expect(wrapper.text()).toContain('1 entreprise(s)')
     expect(wrapper.find('a[href="/companies/7"]').exists()).toBe(true)
   })

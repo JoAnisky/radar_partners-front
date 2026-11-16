@@ -1,4 +1,4 @@
-import type { Channel, CompanyType, Outcome, PipelineStatus, Scope, SignalType } from '~/types/api'
+import type { Channel, CompanyType, Outcome, PipelineStatus, Scope, SignalType, Zone } from '~/types/api'
 
 /** Nom de l'assistant, affiché dans le chat. */
 export const ASSISTANT_NAME = 'Amelio'
@@ -44,6 +44,13 @@ export const outcomeLabels: Record<Outcome, string> = {
 }
 
 export const scopeLabels: Record<Scope, string> = { LOCAL: 'Local', NATIONAL: 'National' }
+
+export const zoneLabels: Record<Zone, string> = {
+  FRANCHE_COMTE: 'Franche-Comté',
+  BOURGOGNE: 'Bourgogne',
+  SUISSE_ROMANDE: 'Suisse romande',
+  OTHER: 'Autre',
+}
 
 export const typeLabels: Record<CompanyType, string> = {
   ESN: 'ESN',

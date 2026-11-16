@@ -40,7 +40,7 @@ describe('CompanyCreateModal', () => {
 
     expect(body().textContent).toContain('Nouvelle entreprise')
     expect(body().textContent).toContain('Nom')
-    expect(body().textContent).toContain('Zone')
+    expect(body().textContent).toContain('Périmètre')
   })
 
   it('refuse un nom vide', async () => {

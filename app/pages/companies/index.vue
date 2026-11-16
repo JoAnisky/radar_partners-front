@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
-import type { CompanySummary, CompanyType, Page, PipelineStatus } from '~/types/api'
+import type { CompanySummary, CompanyType, Page, PipelineStatus, Zone } from '~/types/api'
 
 definePageMeta({ title: 'Entreprises' })
 
@@ -12,6 +12,7 @@ const q = ref('')
 const queryStatus = String(route.query.status ?? '')
 const status = ref<PipelineStatus | 'ALL'>(queryStatus in statusLabels ? queryStatus as PipelineStatus : 'ALL')
 const type = ref<CompanyType | 'ALL'>('ALL')
+const zone = ref<Zone | 'ALL'>('ALL')
 const due = ref(route.query.due === '1')
 const hidePartners = ref(true)
 const sort = ref('score')
@@ -26,7 +27,7 @@ watch(search, (value) => {
     q.value = value.trim()
   }, 300)
 })
-watch([q, status, type, due, hidePartners, sort, direction], () => {
+watch([q, status, type, zone, due, hidePartners, sort, direction], () => {
   page.value = 1
 })
 
@@ -34,6 +35,7 @@ const query = computed(() => ({
   q: q.value || undefined,
   status: status.value === 'ALL' ? undefined : status.value,
   type: type.value === 'ALL' ? undefined : type.value,
+  zone: zone.value === 'ALL' ? undefined : zone.value,
   due: due.value ? 1 : undefined,
   hidePartners: hidePartners.value ? 1 : undefined,
   sort: sort.value,
@@ -50,6 +52,7 @@ const { data, status: loadStatus } = await useAsyncData(
 
 const statusItems = [{ value: 'ALL', label: 'Tous les statuts' }, ...toItems(statusLabels)]
 const typeItems = [{ value: 'ALL', label: 'Tous les types' }, ...toItems(typeLabels)]
+const zoneItems = [{ value: 'ALL', label: 'Toutes les zones' }, ...toItems(zoneLabels)]
 const sortItems = [
   { value: 'score', label: 'Score' },
   { value: 'name', label: 'Nom' },
@@ -62,6 +65,7 @@ const columns: TableColumn<CompanySummary>[] = [
   { accessorKey: 'score', header: 'Score' },
   { accessorKey: 'name', header: 'Entreprise' },
   { accessorKey: 'city', header: 'Ville' },
+  { accessorKey: 'zone', header: 'Zone' },
   { accessorKey: 'headcountRange', header: 'Effectif' },
   { accessorKey: 'status', header: 'Statut' },
   { accessorKey: 'lastInteractionAt', header: 'Dernier contact' },
@@ -80,6 +84,11 @@ const columns: TableColumn<CompanySummary>[] = [
       <USelect
         v-model="status"
         :items="statusItems"
+        class="w-48"
+      />
+      <USelect
+        v-model="zone"
+        :items="zoneItems"
         class="w-48"
       />
       <USelect
@@ -122,6 +131,9 @@ const columns: TableColumn<CompanySummary>[] = [
         >
           {{ row.original.name }}
         </NuxtLink>
+      </template>
+      <template #zone-cell="{ row }">
+        {{ row.original.zone ? zoneLabels[row.original.zone] : '—' }}
       </template>
       <template #headcountRange-cell="{ row }">
         {{ row.original.headcountRange ?? '—' }}

@@ -80,7 +80,7 @@ async function submit() {
               class="w-full"
             />
           </UFormField>
-          <UFormField label="Zone">
+          <UFormField label="Périmètre">
             <USelect
               v-model="form.scope"
               :items="toItems(scopeLabels)"

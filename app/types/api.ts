@@ -1,5 +1,6 @@
 export type PipelineStatus = 'TO_CONTACT' | 'CONTACTED' | 'FOLLOW_UP' | 'MEETING' | 'PARTNER' | 'ON_HOLD' | 'EXCLUDED'
 export type Scope = 'LOCAL' | 'NATIONAL'
+export type Zone = 'FRANCHE_COMTE' | 'BOURGOGNE' | 'SUISSE_ROMANDE' | 'OTHER'
 export type CompanyType = 'ESN' | 'WEB_AGENCY' | 'COM_AGENCY' | 'END_CLIENT' | 'INDIVIDUAL' | 'UNKNOWN'
 export type Channel = 'PHONE' | 'EMAIL' | 'IN_PERSON' | 'LINKEDIN' | 'WEB_FORM'
 export type Outcome
@@ -26,6 +27,7 @@ export interface CompanySummary {
   headcountRange: string | null
   type: CompanyType
   scope: Scope
+  zone: Zone | null
   status: PipelineStatus
   score: number
   flags: string[]
@@ -116,6 +118,7 @@ export interface CompanyUpdatePayload {
   name?: string
   type?: CompanyType
   scope?: Scope
+  zone?: Zone | null
   website?: string | null
   address?: string | null
   postalCode?: string | null

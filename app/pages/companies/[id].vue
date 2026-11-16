@@ -109,7 +109,7 @@ const contactName = (contactId: number | null) =>
           </UBadge>
         </h1>
         <p class="text-sm text-muted">
-          {{ typeLabels[company.type] }} · {{ scopeLabels[company.scope] }}
+          {{ [typeLabels[company.type], scopeLabels[company.scope], company.zone && zoneLabels[company.zone]].filter(Boolean).join(' · ') }}
           <template v-if="company.siren">
             · SIREN {{ company.siren }}
           </template>

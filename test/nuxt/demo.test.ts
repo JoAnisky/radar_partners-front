@@ -22,6 +22,7 @@ const detail: CompanyDetail = {
   headcountRange: null,
   type: 'WEB_AGENCY',
   scope: 'LOCAL',
+  zone: 'FRANCHE_COMTE',
   status: 'CONTACTED',
   score: 55,
   flags: [],
